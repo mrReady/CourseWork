@@ -1,23 +1,28 @@
 /*
 Курсовая
-V 1.5
+V 1.8
 */
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "list.h"
-//#include <libintl.h> 
-//#include <locale.h> 
-//#define _(string) gettext (string)
+
+#ifdef __unix__
+#define CLS system("clear");
+#elif WIN32
+#define CLS system("cls");
+#endif
 
 int menu(int k);		// основное меню 
 void refer(head *h);	//справка
 void saveinfile(head *h);		//сохранение в новый файл
+void secret();
 
 //================================================================================================================================================================================================
 
 int main() {
-//	setlocale(LC_ALL, "ru");
 	int c = 1, k = 1;
 	head h;
 	h.first = NULL;
@@ -26,6 +31,8 @@ int main() {
 	while (c) {
 		system("cls");
 		c = menu(h.cnt);
+		if (c == -1)
+			secret();
 		if (c == 1)
 			read(&h);		//считывание с файла
 		if (c == 2 && h.cnt)
@@ -45,8 +52,10 @@ int main() {
 		if ((c == 9 && h.cnt) || (c == 3 && !h.cnt))
 			refer(&h);		//справка
 	}
-	if (h.cnt)		//если есть что сохранять, то сохраняю
+	if (h.cnt) {		//если есть что сохранять и удалять, то сохраняю и удаляю
 		saveinfile(&h);		//сохранение в новый файл
+		delall(&h);			//удаление всего списка
+	}
 	return 0;
 }
 
@@ -108,21 +117,29 @@ int menusort() {
 
 void refer(head *h) {
 	puts("\nReference");
-	puts("The file with which you will work in the program must be in the same folder in the program and called \"game.csv\".\nAt the end of the program, the list you have modified will be saved as \"new game.csv\".\nIf you want to continue working with the list you changed again, just rename \"new game.csv\" to \"game.csv\".\nIf you do not open the list or delete all items from the list, the program will not create a new file. \nYou can only read the \"game.csv\" file once.");
+	puts("The file with which you will work in the program must be in the same folder in the program and called \"game.csv\".\nAt the end of the program, the list you have modified will be saved as \"new game.csv\".\nIf you want to continue working with the list you changed again, just rename \"new game.csv\" to \"game.csv\".\nIf you do not open the list or delete all items from the list, the program will not create a new file.");
 	puts("Press Enter to continue.");
 	getchar();
 }
 
-void saveinfile(head *h) {		//сохранение в новый файл
-	FILE *f;
-	game *l = h->first;
-	if ((f = fopen("new game.csv", "a")) == NULL)
-		puts("Cannot open file.");
-	else {
-		while (l != NULL) {	//пока не конец файла
-			fprintf(f, "%s;%s;%.1f;%d;%d;%d;%d;%d\n", l->name, l->genre, l->fans, l->critic, l->me, l->data[0], l->data[1], l->data[2]);	//добавляю по элементу
-			l = l->next;
+void secret() {
+	FILE *f = NULL;
+	char *s = NULL, *s1 = NULL;
+	s = (char*)calloc(55000, sizeof(char));
+	s1 = (char*)calloc(5000, sizeof(char));
+	if ((f = fopen("secret.txt", "r")) && s && s1) {
+		while (!feof(f)) {
+			fgets(s1, 5000, f);
+			strcat(s, s1);
 		}
-		if (fclose(f) == EOF) puts("Cannot close file.");
+		printf("%s", s);
+		puts("\n");
+		puts("Press Enter to accept.");
+		getchar();
 	}
+	if (fclose(f) == EOF) puts("Cannot close file.");
+	if (s)
+		free(s);
+	if (s1)
+		free(s1);
 }
