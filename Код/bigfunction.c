@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "list.h"
 #include <stdio.h>
+#include <string.h>
 #define MAX 500
 
 void change(game *l1, game *l2);		//замена местами данных
@@ -9,39 +10,44 @@ void change(game *l1, game *l2);		//замена местами данных
 
 void adding(head *h) {		//добавления элемента списка с клавиатуры
 	game *l = NULL;			//создаю новый элемент
+    int len;
 	l = (game*)malloc(sizeof(game));
 	l->name = (char*)malloc(MAX * sizeof(char));
 	l->genre = (char*)malloc(MAX * sizeof(char));
 	if (l && l->name && l->genre) {		//проверка на выделившуюся память
 		puts("Print name of game:");	//прошу пользователя ввести информацию об игре по одному полю
-		gets(l->name);
+		fgets(l->name,MAX*sizeof(char),stdin);
+		len = strlen(l->name);
+		l->name[len - 1] = '\0';
 		puts("Print genre of game:");
-		gets(l->genre);
+		fgets(l->genre,MAX*sizeof(char),stdin);
+		len = strlen(l->genre);
+		l->genre[len - 1] = '\0';
 		do {
 			puts("Print fans rating for this game from 0 to 10:");
 			scanf("%f", &(l->fans));
-			gets();		//Очищаю поток символов, которые не считались
+			fgets(stdin,MAX*sizeof(char),stdin);		//Очищаю поток символов, которые не считались
 			if (l->fans < 0 || l->fans > 10)			//проверка на допустимый ввод
 				puts("Error of print.\nRe-enter please\n");
 		} while (l->fans < 0 || l->fans > 10);
 		do {
 			puts("Print critic rating for this game from 0 to 100:");
 			scanf("%d", &(l->critic));
-			gets();
+			fgets(stdin,MAX*sizeof(char),stdin);
 			if (l->critic < 0 || l->critic > 100)
 				puts("Error of print.\nRe-enter please\n");
 		} while (l->critic < 0 || l->critic > 100);
 		do {
 			puts("Print your rating for this game from 0 to 5:");
 			scanf("%d", &(l->me));
-			gets();
+			fgets(stdin,MAX*sizeof(char),stdin);
 			if (l->me < 0 || l->me > 5)
 				puts("Error of print.\nRe-enter please\n");
 		} while (l->me < 0 || l->me > 5);
 		do {
-			puts("Print data of exit game in format \"day.month.year\" :");		
-			scanf("%d.%d.%d", &(l->data[0]), &(l->data[1]), &(l->data[2]));		//допускаю, что игры выходили с 1940 до 2100, и день и месяц не могут быть 0 
-			gets();
+			puts("Print data of exit game in format \"day.month.year\" :");
+			scanf("%d.%d.%d", &(l->data[0]), &(l->data[1]), &(l->data[2]));		//допускаю, что игры выходили с 1940 до 2100, и день и месяц не могут быть 0
+			fgets(stdin,MAX*sizeof(char),stdin);
 			if (l->data[0] < 1 || l->data[0] > 31 || l->data[1] < 1 || l->data[1] > 12 || l->data[2] < 1940 || l->data[3] > 2100)
 				puts("Error of print.\nRe-enter please");
 		} while (l->data[0] < 1 || l->data[0] > 31 || l->data[1] < 1 || l->data[1] > 12 || l->data[2] < 1940 || l->data[3] > 2100);
@@ -79,17 +85,17 @@ void edit(head *h) {		//редактирование элемента списк
 		puts("Now here is:\n");
 		if (p == 1) {		//тут условие на необходимый параметр
 			printf("%s\n\nEdit name game of card like you want: ", l->name);	//вывожу то, что тут есть на данный момент, и предлагаю написать свой вариант
-			gets(l->name);		//считываю
+			fgets(l->name,MAX*sizeof(char),stdin);		//считываю
 		}
 		if (p == 2) {		//аналогично другим параметрам
 			printf("%s\n\nEdit ganre of card like you want: ", l->genre);
-			gets(l->genre);
+			fgets(l->genre,MAX*sizeof(char),stdin);
 		}
 		if (p == 3) {
 			printf("%f\n\nEdit fans rating of card like you want from 0 to 10: ", l->fans);
 			do {
 				scanf("%f", &f);
-				gets();
+				fgets(stdin,MAX*sizeof(char),stdin);
 				if (f < 0 || f > 10)			//проверка на допустимый ввод
 					puts("Error of print.\nRe-enter please\n");
 			} while (f < 0 || f > 10);
@@ -99,7 +105,7 @@ void edit(head *h) {		//редактирование элемента списк
 			printf("%d\n\nEdit critic rating of card like you want from 0 to 100: ", l->critic);
 			do {
 				scanf("%d", &n);
-				gets();
+				fgets(stdin,MAX*sizeof(char),stdin);
 				if (n < 0 || n > 100)
 					puts("Error of print.\nRe-enter please\n");
 			} while (n < 0 || n > 100);
@@ -109,7 +115,7 @@ void edit(head *h) {		//редактирование элемента списк
 			printf("%d\n\nEdit my rating of card like you want from 0 to 5: ", l->me);
 			do {
 				scanf("%d", &n);
-				gets();
+				fgets(stdin,MAX*sizeof(char),stdin);
 				if (n < 0 || n > 5)
 					puts("Error of print.\nRe-enter please\n");
 			} while (n < 0 || n > 5);
@@ -119,7 +125,7 @@ void edit(head *h) {		//редактирование элемента списк
 			printf("%d\n\nEdit day game of card like you want from 1 to 31: ", l->data[0]);
 			do {
 				n = scanf("%d", &n);
-				gets();
+				fgets(stdin,MAX*sizeof(char),stdin);
 				if (n < 1 || n > 31)
 					puts("Error of print.\nRe-enter please\n");
 			} while (n < 1 || n > 31);
@@ -129,7 +135,7 @@ void edit(head *h) {		//редактирование элемента списк
 			printf("%d\n\nEdit month game of card like you want from 1 to 12: ", l->data[1]);
 			do {
 				scanf("%d", &n);
-				gets();
+				fgets(stdin,MAX*sizeof(char),stdin);
 				if (n < 1 || n > 12)
 					puts("Error of print.\nRe-enter please\n");
 			} while (n < 1 || n > 12);
@@ -139,7 +145,7 @@ void edit(head *h) {		//редактирование элемента списк
 			printf("%d\n\nEdit year game of card like you want from 1940 to 2100: ", l->data[2]);
 			do {
 				scanf("%d", &n);
-				gets();
+				fgets(stdin,MAX*sizeof(char),stdin);
 				if (n < 1940 || n > 2100)
 					puts("Error of print.\nRe-enter please\n");
 			} while (n < 1940 || n > 2100);
@@ -205,7 +211,7 @@ void search(head *h) {		//поиск по параметру
 		}
 	}
 	else
-		puts("Error of memory!");		//ошибка памяти 
+		puts("Error of memory!");		//ошибка памяти
 	if (s)				//освобождение памяти, если осталась
 		free(s);
 	puts("Press Enter to continue.");
@@ -218,7 +224,7 @@ void sorty(head *h) {		//сортировка по параметру
 	int p = task(), q = menusort();		//пользователь даёт настройки, что делать
 	game *l1 = h->first, *l2;
 	if (p && q)		//если пользователю не надо в меню, то
-		for (int i = 1; i < h->cnt; i++) {		//сортировка пузырьком (сравниваю 1 со всеми впереди стоящими, потом сравниваю 2 ....) 
+		for (int i = 1; i < h->cnt; i++) {		//сортировка пузырьком (сравниваю 1 со всеми впереди стоящими, потом сравниваю 2 ....)
 			l2 = l1->next;
 			for (int j = l2->id; j <= h->cnt; j++) {
 				if (p == 1 && ((q == 1 && strcmp(l1->name, l2->name) > 0) || (q == 2 && strcmp(l1->name, l2->name) < 0)))	//тут учитываются все настройки от пользователя
