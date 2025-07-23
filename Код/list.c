@@ -25,11 +25,11 @@ void addlist(head *h, FILE *f) {		//добавление по элементу
 	l = (game*)malloc(sizeof(game));
 	l->name = (char*)malloc(MAX * sizeof(char));
 	l->genre = (char*)malloc(MAX * sizeof(char));
-	if (l && l->genre && l->name) {					//строчкой ниже заполняем лист списка информацией из файла	
+	if (l && l->genre && l->name) {					//строчкой ниже заполняем лист списка информацией из файла
 		fscanf(f, "%[^;];%[^;];%f;%d;%d;%d;%d;%d", l->name, l->genre, &(l->fans), &(l->critic), &(l->me), &(l->data[0]), &(l->data[1]), &(l->data[2]));
 		fgetc(f);				//считываю символ конца строки
 		if (h->first != NULL) 	//если первый элемент списка есть, то...
-			h->last->next = l;	//...то последний элемент будет заменён на новосчитанный 
+			h->last->next = l;	//...то последний элемент будет заменён на новосчитанный
 		else {			//если это первый элемент списка, то он и будет замыкающим
 			h->first = l;
 			h->last = l;
@@ -90,7 +90,7 @@ void delete(head *h) {				//удаление элемента списка
 			free(l);		//удаляем выбранный элемент
 		l = h->first;	//теперь от начала списка
 		while (l != NULL) {
-			if (l->id > k) 
+			if (l->id > k)
 				l->id--;	//уменьшаем номер элемента на -1, если элемент стоял перед удаляемым
 			l = l->next;
 		}
@@ -127,3 +127,4 @@ void saveinfile(head *h) {		//сохранение в новый файл
 		}
 		if (fclose(f) == EOF) puts("Cannot close file.");
 	}
+}
